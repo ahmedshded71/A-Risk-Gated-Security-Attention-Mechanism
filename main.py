@@ -2,7 +2,7 @@
 import sys
 import numpy as np
 import tensorflow as tf
-from rgsa.training.pipeline import run_multi_dataset_pipeline
+from src.rgsa.training.pipeline import run_multi_dataset_pipeline
 
 
 def main():
@@ -18,17 +18,17 @@ def main():
     try:
         results = run_multi_dataset_pipeline()
         print("\n" + "="*90)
-        print("✅ SUCCESS: Full execution completed successfully - v5.6.2")
+        print("INFO: Full execution completed successfully - v5.6.2")
         print("="*90)
-        print("\n🎓 This work is ready for Q1 journal publication with:")
-        print("   ✅ Mandatory two-stage pipeline")
-        print("   ✅ Per-sample inference time metrics (avg, P50, P90, P95, P99)")
-        print("   ✅ Throughput measurements (samples/sec)")
-        print("   ✅ Complete sample count transparency")
-        print("   ✅ Confusion matrices with RAW COUNTS")
+        print("\nRun summary:")
+        print("   - Mandatory two-stage pipeline")
+        print("   - Per-sample inference time metrics (avg, P50, P90, P95, P99)")
+        print("   - Throughput measurements (samples/sec)")
+        print("   - Complete sample count transparency")
+        print("   - Confusion matrices with RAW COUNTS")
         print("="*90)
     except Exception as e:
-        print(f"\n❌ Fatal error: {str(e)}")
+        print(f"\nERROR: {str(e)}")
         import traceback; traceback.print_exc()
         sys.exit(1)
 

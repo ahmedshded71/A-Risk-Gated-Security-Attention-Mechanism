@@ -26,7 +26,7 @@ from rgsa.utils.reporting import save_methodology_report, save_results_csv
 
 def run_mandatory_two_stage_pipeline(dataset_name: str):
     """Execute the full two-stage pipeline for a single dataset."""
-    print(f"\n{'='*90}\n▶️  Starting MANDATORY TWO-STAGE pipeline on: {dataset_name}\n{'='*90}")
+    print(f"\n{'='*90}\nStarting mandatory two-stage pipeline on: {dataset_name}\n{'='*90}")
     try:
         df, feature_cols = load_and_preprocess(dataset_name)
         df_balanced, methodology_doc, security_tiers = create_enhanced_balance(df, dataset_name)
@@ -42,14 +42,14 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
         benign_idx = np.where(class_names == 'BENIGN')[0][0]
         y_binary = (y_multiclass != benign_idx).astype(int)
 
-        print(f"\n✓ Total classes: {n_classes} | Attack classes: {n_classes - 1}")
+        print(f"\nTotal classes: {n_classes} | Attack classes: {n_classes - 1}")
 
         X = df_balanced[feature_cols].values
         X_train, X_test, y_train_bin, y_test_bin, y_train_multi, y_test_multi = train_test_split(
             X, y_binary, y_multiclass, test_size=HYPERPARAMS['test_size'],
             random_state=42, stratify=y_binary)
 
-        print(f"\n📊 SAMPLE COUNT BREAKDOWN - {dataset_name}")
+        print(f"\nSAMPLE COUNT BREAKDOWN - {dataset_name}")
         print(f"TOTAL: {len(df_balanced):,} | Train: {len(X_train):,} | Test: {len(X_test):,}")
 
         X_train = np.nan_to_num(X_train.astype('float32'), nan=0.0, posinf=1e6, neginf=0.0)
@@ -59,7 +59,7 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
         X_test_scaled = scaler.transform(X_test)
 
         base_model = build_rgsa_base(X_train_scaled.shape[1])
-        print(f"\n✓ Shared base architecture: {base_model.count_params():,} parameters")
+        print(f"\nShared base architecture: {base_model.count_params():,} parameters")
 
         # ===== STAGE 1: BINARY DETECTOR =====
         print(f"\n{'='*90}\nSTAGE 1: BINARY DETECTOR - {dataset_name}\n{'='*90}")
@@ -100,7 +100,7 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
         bin_specificity = calculate_specificity(y_test_bin, y_pred_bin)
         bin_fnr = (1 - bin_recall) * 100
 
-        print(f"\n✓✓✓ BINARY DETECTOR PERFORMANCE ✓✓✓")
+        print("\nBINARY DETECTOR PERFORMANCE")
         print(f"  • Accuracy: {bin_accuracy*100:.2f}% | Precision: {bin_precision*100:.2f}%")
         print(f"  • Recall: {bin_recall*100:.2f}% | Specificity: {bin_specificity*100:.2f}%")
         print(f"  • F1: {bin_f1:.4f} | AUC: {binary_auc:.4f} | FNR: {bin_fnr:.2f}%")
@@ -164,7 +164,7 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
         multi_weighted_f1 = f1_score(y_test_attacks, y_pred_multi, average='weighted', zero_division=0)
         multi_avg_specificity = np.mean(calculate_multiclass_specificity(y_test_attacks, y_pred_multi, attack_class_names))
 
-        print(f"\n✓✓✓ MULTICLASS CLASSIFIER PERFORMANCE ✓✓✓")
+        print("\nMULTICLASS CLASSIFIER PERFORMANCE")
         print(f"  • Accuracy: {multi_accuracy*100:.2f}% | Macro-F1: {multi_macro_f1:.4f}")
         print(f"  • Weighted-F1: {multi_weighted_f1:.4f} | AUC: {multi_auc:.4f}")
         print("\n" + classification_report(y_test_attacks, y_pred_multi,
@@ -187,7 +187,7 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
         final_macro_f1 = f1_score(y_test_multi, y_pred_final, average='macro', zero_division=0)
         final_weighted_f1 = f1_score(y_test_multi, y_pred_final, average='weighted', zero_division=0)
 
-        print(f"\n✓✓✓ INTEGRATED PERFORMANCE ✓✓✓")
+        print("\nINTEGRATED PERFORMANCE")
         print(f"  • Overall Accuracy: {final_accuracy*100:.2f}% | Macro-F1: {final_macro_f1:.4f}")
         print(f"  • Weighted-F1: {final_weighted_f1:.4f} | Attack Candidates: {np.sum(attack_candidates):,}")
 
@@ -229,7 +229,7 @@ def run_mandatory_two_stage_pipeline(dataset_name: str):
 
         return results, True
     except Exception as e:
-        print(f"\n❌ Error in {dataset_name}: {str(e)}")
+        print(f"\nError in {dataset_name}: {str(e)}")
         import traceback; traceback.print_exc()
         return {'Dataset': dataset_name, 'Status': 'Failed', 'Error': str(e)}, False
 
@@ -238,16 +238,16 @@ def run_multi_dataset_pipeline():
     """Execute pipeline across all configured datasets."""
     datasets_to_run = ['CIC-IDS2017', 'CIC-IDS2018', 'CIC-IoT2023']
     all_results = []
-    print("\n" + "="*90 + "\n🚀 Starting MANDATORY TWO-STAGE pipeline on 3 datasets\n" + "="*90)
+    print("\n" + "="*90 + "\nStarting mandatory two-stage pipeline on 3 datasets\n" + "="*90)
 
     for ds_name in datasets_to_run:
         try:
             result, success = run_mandatory_two_stage_pipeline(ds_name)
             all_results.append(result)
             if success:
-                print(f"\n✓✓✓ Execution on {ds_name} completed successfully ✓✓✓")
+                print(f"\nExecution on {ds_name} completed successfully.")
         except Exception as e:
-            print(f"\n❌ Fatal error processing {ds_name}: {str(e)}")
+            print(f"\nError processing {ds_name}: {str(e)}")
             all_results.append({'Dataset': ds_name, 'Status': 'Failed', 'Error': str(e)})
 
     from rgsa.utils.reporting import save_comparison_report

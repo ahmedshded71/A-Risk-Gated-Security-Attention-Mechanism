@@ -53,21 +53,21 @@ MULTICLASS CLASSIFIER:
     filename = f'{OUTPUT_DIR}/methodology_report_{dataset_name.replace("-", "_").lower()}_v5.6.2.txt'
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(report)
-    print(f"✓ Comprehensive report saved: {filename}")
+    print(f"Comprehensive report saved: {filename}")
 
 
 def save_results_csv(results: dict, dataset_name: str):
     """Save per-dataset results to CSV."""
     filename = f'{OUTPUT_DIR}/rgsa_results_{dataset_name.replace("-", "_").lower()}_v5.6.2.csv'
     pd.DataFrame([results]).to_csv(filename, index=False, encoding='utf-8-sig')
-    print(f"✓ Results saved: {filename}")
+    print(f"Results saved: {filename}")
 
 
 def save_comparison_report(all_results: list):
     """Save cross-dataset comparison CSV and summary TXT."""
     successful = [r for r in all_results if 'Integrated_Macro_F1' in r]
     if not successful:
-        print("⚠️  No successful executions - cannot generate comparison")
+        print("No successful executions - cannot generate comparison")
         return
 
     df = pd.DataFrame(successful)
@@ -80,11 +80,11 @@ def save_comparison_report(all_results: list):
         'Integrated_Accuracy', 'Integrated_Macro_F1',
     ]
     df = df[[c for c in key_columns if c in df.columns]].sort_values('Integrated_Macro_F1', ascending=False)
-    print("\n" + "="*90 + "\n📊 FINAL COMPARATIVE REPORT (v5.6.2)\n" + "="*90)
+    print("\n" + "="*90 + "\nFinal comparative report (v5.6.2)\n" + "="*90)
     print(df.to_string(index=False))
 
     df.to_csv(f'{OUTPUT_DIR}/rgsa_multi_dataset_comparison_v5.6.2.csv', index=False, encoding='utf-8-sig')
-    print(f"✓ Unified comparison saved: {OUTPUT_DIR}/rgsa_multi_dataset_comparison_v5.6.2.csv")
+    print(f"Unified comparison saved: {OUTPUT_DIR}/rgsa_multi_dataset_comparison_v5.6.2.csv")
 
     summary = f"""
 ==========================================================================================
@@ -94,19 +94,8 @@ EXECUTION SUMMARY:
 • Datasets Processed: {len(successful)}
 • Total Samples Processed: {df['Test_Samples_Total'].sum():,}
 • Attack Samples Processed: {df['Test_Samples_Attack'].sum():,}
-
-REAL-TIME DEPLOYMENT READINESS:
-✅ All models achieve < 1 ms per-sample latency
-✅ P99 latency < 2 ms → Predictable performance under load
-✅ Throughput > 1,000 samples/sec → Handles high-traffic networks
-
-Q1 JOURNAL PUBLICATION READINESS:
-✅ Mandatory two-stage pipeline (binary NEVER skipped)
-✅ Per-sample inference time metrics (avg, P50, P90, P95, P99)
-✅ Complete sample count transparency
-✅ 6 Confusion matrices with RAW COUNTS
 ==========================================================================================
 """
     with open(f'{OUTPUT_DIR}/inference_time_summary_v5.6.2.txt', 'w', encoding='utf-8') as f:
         f.write(summary)
-    print(f"✓ Inference time summary saved: {OUTPUT_DIR}/inference_time_summary_v5.6.2.txt")
+    print(f"Inference time summary saved: {OUTPUT_DIR}/inference_time_summary_v5.6.2.txt")

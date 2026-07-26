@@ -52,8 +52,8 @@ def measure_inference_time(model, X_samples, batch_size: int = 512,
 
 
 def print_inference_metrics(metrics: dict, stage_name: str, dataset_name: str):
-    """Pretty-print inference metrics."""
-    print(f"\n{'='*90}\n⏱️  INFERENCE TIME METRICS - {stage_name} ({dataset_name})\n{'='*90}")
+    """Print inference metrics in a readable format."""
+    print(f"\n{'='*90}\nINFERENCE TIME METRICS - {stage_name} ({dataset_name})\n{'='*90}")
     print(f"  • Average Latency:      {metrics['avg_time_ms']:.4f} ms/sample")
     print(f"  • Median (P50):         {metrics['p50_ms']:.4f} ms/sample")
     print(f"  • P90 Latency:          {metrics['p90_ms']:.4f} ms/sample")

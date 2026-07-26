@@ -38,7 +38,7 @@ def plot_confusion_matrix_raw_counts(y_true, y_pred, class_names, dataset_name, 
     filename = f'{OUTPUT_DIR}/confusion_matrix_raw_{stage_name.lower().replace(" ", "_")}_{dataset_name.replace("-", "_").lower()}.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✓✓✓ {stage_name} CONFUSION MATRIX saved: {filename}")
+    print(f"{stage_name} confusion matrix saved: {filename}")
     return filename
 
 
@@ -60,7 +60,7 @@ def plot_training_curves(history, dataset_name, stage_name):
     filename = f'{OUTPUT_DIR}/training_curves_{stage_name.lower().replace(" ", "_")}_{dataset_name.replace("-", "_").lower()}.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✓ Training curves saved: {filename}")
+    print(f"Training curves saved: {filename}")
     return filename
 
 
@@ -80,7 +80,7 @@ def plot_binary_roc_auc(y_true, y_pred_proba, dataset_name):
     filename = f'{OUTPUT_DIR}/roc_auc_binary_{dataset_name.replace("-", "_").lower()}.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✓ Binary ROC/AUC saved: {filename}")
+    print(f"Binary ROC/AUC saved: {filename}")
     return filename, roc_auc_val
 
 
@@ -113,5 +113,5 @@ def plot_multiclass_roc_auc(y_true, y_pred_proba, class_names, dataset_name):
     filename = f'{OUTPUT_DIR}/roc_auc_multiclass_{dataset_name.replace("-", "_").lower()}.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    print(f"✓ Multiclass ROC/AUC saved: {filename}")
+    print(f"Multiclass ROC/AUC saved: {filename}")
     return filename, roc_auc["micro"]

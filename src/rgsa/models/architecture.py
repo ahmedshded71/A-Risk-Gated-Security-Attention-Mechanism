@@ -5,7 +5,7 @@ from rgsa.config import HYPERPARAMS
 
 
 class SecurityTokenizer(layers.Layer):
-    """Maps raw features into semantic security tokens."""
+    """Transforms raw input features into a set of token vectors."""
     def __init__(self, token_dim=32, **kwargs):
         super().__init__(**kwargs)
         self.token_dim = token_dim
@@ -30,7 +30,7 @@ class SecurityTokenizer(layers.Layer):
 
 
 class RiskGatedSecurityAttention(layers.Layer):
-    """Attention mechanism gated by learned risk scores."""
+    """Computes attention over tokens and applies a risk-based gate."""
     def __init__(self, token_dim=32, **kwargs):
         super().__init__(**kwargs)
         self.token_dim = token_dim

@@ -16,7 +16,7 @@ def calculate_hierarchical_weights(y_train: np.ndarray, class_names: list, secur
     total = len(y_train)
     n_classes = len(np.unique(y_train))
 
-    print("\n✓ Hierarchical class weights calculated by security tier:")
+    print("\nHierarchical class weights calculated by security tier:")
     print(f"{'Class':<25} {'Tier':<12} {'Count':>8} {'Weight':>8}")
     print("-" * 55)
 
@@ -26,13 +26,13 @@ def calculate_hierarchical_weights(y_train: np.ndarray, class_names: list, secur
         tier = class_to_tier.get(class_name, 'common')
 
         if tier == 'critical':
-            max_weight, tier_label = 50.0, "🔴 Critical"
+            max_weight, tier_label = 50.0, "Critical"
         elif tier == 'moderate':
-            max_weight, tier_label = 15.0, "🟡 Moderate"
+            max_weight, tier_label = 15.0, "Moderate"
         elif 'BENIGN' in class_name.upper():
-            max_weight, tier_label = 0.7, "⚪ Benign"
+            max_weight, tier_label = 0.7, "Benign"
         else:
-            max_weight, tier_label = 1.0, "🟢 Common"
+            max_weight, tier_label = 1.0, "Common"
 
         weight = max(min(base_weight * max_weight, max_weight), 0.5)
         class_weights[class_idx] = weight

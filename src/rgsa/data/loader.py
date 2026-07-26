@@ -13,7 +13,7 @@ def find_dataset_path(dataset_name: str) -> str:
         if os.path.exists(path):
             return path
 
-    print(f"  ⚠️  Predefined paths not found. Searching for {dataset_name}...")
+    print(f"  Predefined paths not found. Searching for {dataset_name}...")
     keywords = DATASET_KEYWORDS.get(dataset_name, [dataset_name.lower().replace('-', '')])
     search_roots = ['.', './data', './datasets', './input', '../input']
 
@@ -24,7 +24,7 @@ def find_dataset_path(dataset_name: str) -> str:
             for filename in filenames:
                 if any(kw in filename.lower() for kw in keywords) and filename.endswith('.csv'):
                     full_path = os.path.join(dirpath, filename)
-                    print(f"  ✓ Found dataset at: {full_path}")
+                    print(f"  Found dataset at: {full_path}")
                     return full_path
 
     for pattern in [f"*{keywords[0]}*.csv"]:

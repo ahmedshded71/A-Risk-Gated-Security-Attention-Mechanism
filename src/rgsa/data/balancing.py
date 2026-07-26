@@ -25,7 +25,7 @@ def create_enhanced_balance(df: pd.DataFrame, dataset_name: str = ""):
     # Inject synthetic BENIGN if missing
     benign_injected = False
     if len(df_benign) == 0:
-        print("\n⚠️  WARNING: No BENIGN samples found. Injecting synthetic BENIGN...")
+        print("\nWARNING: No BENIGN samples found. Injecting synthetic BENIGN...")
         smallest_attack = attack_counts[~attack_counts.index.isin(['BENIGN', 'BENIGN ', 'NORMAL'])].idxmin()
         df_smallest = df_attacks[df_attacks['attack_type'] == smallest_attack].copy()
         benign_samples_needed = max(5000, int(len(df_attacks) * 0.1))
@@ -38,9 +38,9 @@ def create_enhanced_balance(df: pd.DataFrame, dataset_name: str = ""):
                 df_benign[col] = df_benign[col] * reduction_factor
         df_benign['attack_type'] = 'BENIGN'
         benign_injected = True
-        print(f"✓ Injected {len(df_benign):,} synthetic BENIGN samples")
+        print(f"Injected {len(df_benign):,} synthetic BENIGN samples")
     else:
-        print("✓ BENIGN samples exist - no injection needed")
+        print("BENIGN samples exist - no injection needed")
 
     # Balance attack classes by security tier
     df_augmented_parts = []
@@ -77,8 +77,8 @@ def create_enhanced_balance(df: pd.DataFrame, dataset_name: str = ""):
             })
             df_augmented_parts.append(df_aug)
 
-            marker = "🔴" if tier_name == 'critical' else ("🟡" if tier_name == 'moderate' else "🟢")
-            print(f"  {marker} {found_type:<25} {orig_count:>6,} × {factor:<2} = {final_count:>7,} "
+            marker = "CRITICAL" if tier_name == 'critical' else ("MODERATE" if tier_name == 'moderate' else "COMMON")
+            print(f"  {marker:<8} {found_type:<25} {orig_count:>6,} × {factor:<2} = {final_count:>7,} "
                   f"[CVE: {spec.get('cve', 'N/A')}, Severity: {spec['severity']}]")
 
     df_attacks_balanced = pd.concat(df_augmented_parts, ignore_index=True)
@@ -87,7 +87,7 @@ def create_enhanced_balance(df: pd.DataFrame, dataset_name: str = ""):
     actual_ratio = benign_target / (benign_target + attacks_total)
     df_benign_sampled = df_benign.sample(n=benign_target, random_state=42)
 
-    print(f"\n✓ Final BENIGN sampling: {benign_target:,} samples ({actual_ratio*100:.1f}%)")
+    print(f"\nFinal BENIGN sampling: {benign_target:,} samples ({actual_ratio*100:.1f}%)")
     df_balanced = pd.concat([df_benign_sampled, df_attacks_balanced], ignore_index=True)
     df_balanced = df_balanced.sample(frac=1, random_state=42).reset_index(drop=True)
 
@@ -100,6 +100,6 @@ def create_enhanced_balance(df: pd.DataFrame, dataset_name: str = ""):
     filename = f'{OUTPUT_DIR}/methodology_{dataset_name.replace("-", "_").lower()}.json'
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(methodology, f, indent=2, ensure_ascii=False)
-    print(f"\n✓ Methodology saved: {filename}")
+    print(f"\nMethodology saved: {filename}")
 
     return df_balanced, methodology, SECURITY_TIERS
