@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 # 🛡️ RGSA-Transformer
 =======
-# 🛡️ RGSA-Transformer v5.6.2
+# 🛡️ RGSA-Transformer
 >>>>>>> 5f86b2c1a1bb84ad1db6f05d0b20fc0fb5956b55
 ### A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection
 
@@ -381,38 +381,36 @@ The following research directions will be pursued:
 
 ## 📜 Citation
 
-If you use this code, framework, or methodology in your research, please cite our work:
+If you use this code, framework, or methodology in your research, please cite our work. 
+
+> **Note:** This manuscript is currently **under review** at *Network* (MDPI). The citation details (DOI, Volume, Pages) will be updated upon official publication.
 
 ### BibTeX
 
 ```bibtex
-@article{elsaid2026rgsa,
+@misc{elsaid2026rgsa,
   title={A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection},
   author={Elsaid, Shaimaa Ahmed and Fouda, Eslam Mahmoud and Saad, Ahmed M.},
-  journal={Network},
-  volume={6},
-  number={x},
-  pages={X--X},
   year={2026},
-  publisher={MDPI},
-  doi={10.3390/network60x0000},
-  note={Code available at: https://github.com/yourusername/RGSA-Transformer-IDS}
+  howpublished={Manuscript under review at \textit{Network} (MDPI)},
+  note={Code and implementation details available at: https://github.com/yourusername/RGSA-Transformer-IDS}
 }
 ```
 
-### APA
+### APA (7th Edition)
 
-> Elsaid, S. A., Fouda, E. M., & Saad, A. M. (2026). A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection. *Network, 6*(x), X–X. https://doi.org/10.3390/network60x0000
+> Elsaid, S. A., Fouda, E. M., & Saad, A. M. (2026). *A risk-gated security attention mechanism for rare threat detection in industrial IoT intrusion detection* [Manuscript under review]. Network (MDPI).
 
 ### IEEE
 
-> S. A. Elsaid, E. M. Fouda, and A. M. Saad, "A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection," *Network*, vol. 6, no. x, pp. X–X, 2026, doi: 10.3390/network60x0000.
+> S. A. Elsaid, E. M. Fouda, and A. M. Saad, "A risk-gated security attention mechanism for rare threat detection in industrial IoT intrusion detection," Manuscript under review, *Network* (MDPI), 2026.
 
-### MLA
+### MLA (9th Edition)
 
-> Elsaid, Shaimaa Ahmed, Eslam Mahmoud Fouda, and Ahmed M. Saad. "A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection." *Network* 6.x (2026): X–X.
+> Elsaid, Shaimaa Ahmed, Eslam Mahmoud Fouda, and Ahmed M. Saad. "A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection." *Manuscript under review*, Network (MDPI), 2026.
 
 ---
+💡 **Tip for the future:** Once the paper is accepted, simply replace `Manuscript under review` with the official Journal Volume, Issue, Page numbers, and the real DOI link provided by MDPI.
 
 ## 🙏 Acknowledgments
 
