@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # 🛡️ RGSA-Transformer
+=======
+# 🛡️ RGSA-Transformer v5.6.2
+>>>>>>> 5f86b2c1a1bb84ad1db6f05d0b20fc0fb5956b55
 ### A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection
 
 [![Python 3.10](https://img.shields.io/badge/Python-3.10-blue.svg)](https://www.python.org/)
