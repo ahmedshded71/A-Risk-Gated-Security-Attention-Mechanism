@@ -1,0 +1,52 @@
+services:
+  rgsa-transformer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rgsa-transformer:5.6.2-cpu
+    container_name: rgsa-transformer
+    restart: unless-stopped
+    
+    # Volumes for data persistence
+    volumes:
+      # Mount datasets (read-only)
+      - ./data:/app/data:ro
+      # Mount outputs (read-write)
+      - ./outputs:/app/outputs
+    
+    # Environment variables
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TF_CPP_MIN_LOG_LEVEL=2
+      - OMP_NUM_THREADS=4
+      - MPLBACKEND=Agg
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '8'
+          memory: 32G
+        reservations:
+          cpus: '4'
+          memory: 16G
+    
+    # Logging
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+    
+    # Security
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    
+    # Network
+    networks:
+      - rgsa-network
+
+networks:
+  rgsa-network:
+    driver: bridge

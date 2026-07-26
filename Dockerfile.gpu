@@ -1,0 +1,63 @@
+# ==============================================================================
+# RGSA-Transformer v5.6.2 - Docker Image (GPU with CUDA)
+# ==============================================================================
+
+FROM tensorflow/tensorflow:2.16.1-gpu AS builder
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /build
+COPY pyproject.toml uv.lock* ./
+
+# Install dependencies
+RUN uv sync --frozen --no-dev --no-install-project
+
+# ------------------ Runtime ------------------
+FROM tensorflow/tensorflow:2.16.1-gpu AS runtime
+
+LABEL maintainer="Eslam Fouda, Ahmed Saad"
+LABEL version="5.6.2-gpu"
+LABEL description="RGSA-Transformer GPU: Risk-Gated Security Attention for IDS"
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+# Create non-root user
+RUN groupadd -r rgsa && useradd -r -g rgsa -m rgsa
+
+WORKDIR /app
+
+# Copy virtual environment
+COPY --from=builder --chown=rgsa:rgsa /build/.venv /app/.venv
+
+# Copy application
+COPY --chown=rgsa:rgsa src/ /app/src/
+COPY --chown=rgsa:rgsa main.py /app/
+COPY --chown=rgsa:rgsa README.md /app/
+COPY --chown=rgsa:rgsa scripts/ /app/scripts/
+
+RUN chmod +x /app/scripts/*.sh 2>/dev/null || true
+RUN mkdir -p /app/data /app/outputs && chown -R rgsa:rgsa /app/data /app/outputs
+
+# GPU environment variables
+ENV PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH="/app/src:$PYTHONPATH" \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    TF_CPP_MIN_LOG_LEVEL=2 \
+    MPLBACKEND=Agg \
+    CUDA_VISIBLE_DEVICES=0 \
+    TF_FORCE_GPU_ALLOW_GROWTH=true
+
+USER rgsa
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD python -c "import tensorflow as tf; print('GPU:', tf.config.list_physical_devices('GPU'))" || exit 1
+
+CMD ["python", "main.py"]
