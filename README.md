@@ -86,6 +86,52 @@ pip install -r requirements.txt  # numpy, pandas, matplotlib, seaborn, scikit-le
 
 ---
 
+### Option 3: Docker (Recommended for reproducible environments)
+
+Build the Docker image and run the container which includes all dependencies and a ready-to-run entrypoint.
+
+```bash
+# Build the image (from repository root)
+docker build -t rgsa-transformer:latest .
+
+# Run the container mounting local data and outputs (adjust paths as needed)
+docker run --rm -it \
+  -v $(pwd)/data:/app/data \
+  -v $(pwd)/outputs:/app/outputs \
+  -p 8888:8888 \
+  rgsa-transformer:latest \
+  bash -c "uv run python main.py"
+```
+
+Notes:
+- Use the provided Dockerfile (create one if missing) to pin Python/TensorFlow versions for reproducibility.
+- For GPU support, build an image from an official CUDA/TensorFlow base and run with --gpus all.
+
+Docker files included in this repository:
+
+- Dockerfile            — CPU image (used by docker-compose)
+- Dockerfile.gpu        — GPU image (CUDA/TensorFlow base)
+- docker-compose.yml    — Compose service for CPU
+- docker-compose.gpu.yml— Compose service for GPU
+
+Quick helpers:
+
+- scripts/run.sh        — build/run helpers (build, build-gpu, run, gpu, shell, logs, stop, clean, test)
+- scripts/entrypoint.sh — container entrypoint (environment and dataset checks)
+
+Examples:
+
+Start using docker-compose (CPU):
+```bash
+./scripts/run.sh run
+```
+
+Start with GPU (requires NVIDIA drivers and nvidia-docker):
+```bash
+./scripts/run.sh gpu
+```
+
+
 ## 💻 Usage
 
 Ensure your datasets (`.csv`) are placed in the `./data/` directory (or update the `DATASET_PATHS` dictionary in `src/rgsa/config.py`).
@@ -128,26 +174,6 @@ This codebase is explicitly structured to meet the rigorous reproducibility and 
 - ✅ **Security-tier-aligned evaluation** (NIST SP 800-115 impact metrics, not just macro-accuracy).
 
 ---
-
-## 📜 Citation
-If you use this code, framework, or methodology in your research, please cite our work:
-
-```bibtex
-@article{fouda2026rgsa,
-  title={A Risk-Gated Security Attention Mechanism for Rare Threat Detection in Industrial IoT Intrusion Detection},
-  author={Fouda, Eslam and Saad, Ahmed},
-  journal={IEEE Transactions on Information Forensics and Security (TIFS) / IEEE Internet of Things Journal}, 
-  year={2026},
-  volume={X},
-  number={X},
-  pages={X--X},
-  publisher={IEEE},
-  note={Code available at: https://github.com/yourusername/RGSA-Transformer-IDS}
-}
-```
-
----
-
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. 
 
